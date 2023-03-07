@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="report_telegraphic_transfer_payment_document">
+		<t t-call="web.html_container">
+			<t t-call="web.external_layout">
+				<t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)" />
+				<div class="page">
+					<t t-if="doc.payment_type == 'outbound' and doc.journal_id != False and doc.payment_method_code in ['manual', 'tt'] and doc.journal_id.type == 'bank'">
+						<div class="row col-12">
+							<span class="col-6" style="float:right; margin-left:-15px">
+								Date : <span t-field="doc.date"/>
+							</span>
+							<span class="col-6" style="float:left">
+								REF : <span t-field="doc.name"/>
+							</span>
+						</div>
+						<div class="row col-12 mt-3">
+							<span>
+								The Manager,
+								<br/>
+								<span t-field="doc.journal_id.name"/>
+							</span>
+						</div>
+						<div class="row col-12 mt-4">
+							<span>
+								Kind Attn:
+								<br/>
+								Dear Sir,
+							</span>
+						</div>
+						<div class="row col-12 mt-3">
+							<div class="col-12 text-center">
+								<h6>Sub: TELEGRAPHIC TRANSFER</h6>
+							</div>
+						</div>
+						<div class="row col-12 mt-5">
+							<div class="col-12">
+								<span>
+									We request you to make a transfer of <span t-field="doc.amount"/>
+									(<span t-esc="doc.currency_id.amount_to_text(doc.amount)"/>)
+									by debiting our <span t-field="doc.journal_id.bank_account_id.acc_number"/> <span t-field="doc.currency_id.name"/>
+									with your bank, as per the details below.
+								</span>
+							</div>
+						</div>
+
+						<div class="row mt-3">
+							<table class="table">
+								<tr>
+									<td class="pl-5" style="border: none!important">Beneficiary Name</td>
+<!--									<td style="border: none!important">:</td>-->
+									<td style="border: none!important"><span t-field="doc.partner_id.name"/></td>
+								</tr>
+								<tr>
+									<td class="pl-5" style="border: none!important">Beneficiary Address</td>
+<!--									<td style="border: none!important">:</td>-->
+									<td style="border: none!important">
+										<span t-field="doc.partner_id.bank_ids[0].bank_id.street"/>
+											<span t-field="doc.partner_id.bank_ids[0].bank_id.street2"/>, <span t-field="doc.partner_id.bank_ids[0].bank_id.city"/>, <span t-field="doc.partner_id.bank_ids[0].bank_id.state.name"/>
+
+									</td>
+								</tr>
+								<tr>
+									<td class="pl-5" style="border: none!important">Account Number / IBAN</td>
+<!--									<td style="border: none!important">:</td>-->
+<!--									<td style="border: none!important">-->
+									<t t-if="doc.partner_id.bank_ids">
+										<td style="border: none!important">
+											<span t-field="doc.partner_id.bank_ids[0].iban_number"/>
+										</td>
+									</t>
+
+<!--									</td>-->
+								</tr>
+								<tr>
+									<td class="pl-5" style="border: none!important">Amount</td>
+<!--									<td style="border: none!important">:</td>-->
+									<td style="border: none!important"><span t-field="doc.amount"/> (<span t-esc="doc.currency_id.amount_to_text(doc.amount)"/>)</td>
+								</tr>
+								<tr>
+									<td class="pl-5" style="border: none!important">Bank Details</td>
+<!--									<td style="border: none!important">:</td>-->
+									<td style="border: none!important">
+										<t t-if="doc.partner_id.bank_ids">
+										<span t-field="doc.partner_id.bank_ids[0].bank_id.name"/>, <span t-field="doc.partner_id.bank_ids[0].bank_id.bic"/>
+										<!--										<span t-field="doc.journal_id.bank_account_id.bank_id.branch"/>-->
+										<!--										<br/>-->
+										<!--										<span t-field="doc.journal_id.bank_account_id.bank_id.street"/>-->
+										</t>
+									</td>
+								</tr>
+								<tr>
+									<td class="pl-5" style="border: none!important">Transaction Type</td>
+<!--									<td style="border: none!important">:</td>-->
+<!--									<td style="border: none!important"/>-->
+									<td style="border: none!important"><span t-field="doc.check_followup"/></td>
+								</tr>
+								<tr>
+									<td class="pl-5" style="border: none!important">Payment Reference</td>
+<!--									<td style="border: none!important">:</td>-->
+<!--									<td style="border: none!important">-->
+									<t t-if="doc.partner_id.bank_ids">
+										<t t-foreach="doc.reconciled_bill_ids" t-as="line">
+											<td><span t-field="line.name"/> -</td>
+										</t>
+									</t>
+<!--									</td>-->
+								</tr>
+							</table>
+						</div>
+						<div class="row col-12 mt-5">
+							<span>
+								Thanks And Best Regards
+								<br/>
+								FOR <span t-field="doc.company_id.name"/>
+							</span>
+						</div>
+						<div class="row col-12 mt-3">
+							<div class="col-12 text-center">
+								<pre> --------------------------                         -------------------------- </pre>
+								<h6 style="margin-top:-25px">AUTHORISED SIGNATORIES</h6>
+							</div>
+						</div>
+
+					</t>
+					<t t-else="">
+						<h4 class="text-center">This Document Is Not Payable</h4>
+					</t>
+				</div>
+			</t>
+		</t>
+	</template>
+
+	<template id="report_telegraphic_transfer_payment">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="check_followup.report_telegraphic_transfer_payment_document" t-lang="doc.partner_id.lang"/>
+			</t>
+		</t>
+	</template>
+
+</odoo>

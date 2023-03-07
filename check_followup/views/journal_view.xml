@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+
+        <record id="view_form_journal_inherit" model="ir.ui.view">
+            <field name="name">view.form.journal.inherit</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+
+                <notebook>
+                    <page string="Accounting">
+                        <field name="type" invisible="1"/>
+                        <group string="Cheque Accounts" col="4">
+                            <field name="out_account" string="PDC Payable" attrs="{'invisible': [('type','!=','bank')],
+                            'required': [('type','=','bank')]}"/>
+                            <field name="in_account" string="PDC Receivable" attrs="{'invisible': [('type','!=','bank')],
+                            'required': [('type','=','bank')]}"/>
+                        </group>
+                        <group string="Advance payment Account">
+                            <field name="advance_acc_id" />
+                            <field name="advance_acc_out_id" />
+<!--                        </group>-->
+<!--                          <group string="Credit card Account" >-->
+<!--                            <field name="credit_card_acc_id" />-->
+<!--                            <field name="credit_card_acc_out_id" />-->
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    </data>
+</odoo>

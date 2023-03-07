@@ -1,0 +1,33 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="inherit_account_move_form">
+            <field name="name">inherit.account.move.form</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="replace">
+                    <field name="state" attrs="{'invisible':[('move_type','=','entry')]}" widget="statusbar" statusbar_visible="draft,posted"/>
+                    <field name="state" attrs="{'invisible':[('move_type','!=','entry')]}" widget="statusbar" statusbar_visible="draft,submitted,posted"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <field name="move_type" invisible="1"/>
+                </xpath>
+                <xpath expr="//button[@name='action_post']" position="attributes">
+                    <attribute name="attrs">{'invisible' : [('state', '!=', 'submitted')]}</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_post']" position="attributes">
+                    <attribute name="groups">intercompany.group_journal_entries_approval</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_post']" position="after">
+                    <button name="submit_entry" string="Submit" type="object" class="oe_highlight"
+                            attrs="{'invisible':['|',('state','!=','draft'),('move_type','!=','entry')]}"
+                    />
+
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

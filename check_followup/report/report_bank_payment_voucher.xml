@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="report_bank_payment_voucher_document">
+		<t t-call="web.html_container">
+			<t t-call="web.external_layout">
+				<t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)" />
+				<div class="page" style="font-size: 14px">
+					<t t-if="doc.payment_type == 'outbound' and doc.journal_id != False and doc.payment_method_code in ['manual', 'pdc'] and doc.journal_id.type == 'bank'">
+						<style>
+							th {
+							background-color : #b8cce4;
+							}
+						</style>
+						<table class="table table-sm table-bordered">
+							<tr>
+								<td class="text-center" rowspan="2" colspan="2" style="vertical-align: middle;font-weight: bold;"><h4>BANK PAYMENT VOUCHER</h4></td>
+								<th class="text-left">BPV No</th>
+								<td class="text-center"><span t-field="doc.name"/></td>
+							</tr>
+							<tr>
+								<th class="text-left">Date</th>
+								<td class="text-center"><span t-field="doc.date"/></td>
+							</tr>
+							<tr>
+								<th class="text-left">Supplier Name</th>
+								<td class="text-center"><span t-field="doc.partner_id.name"/></td>
+								<th class="text-left">Cheque Number</th>
+								<td class="text-center"><span t-field="doc.check_number"/></td>
+							</tr>
+							<tr>
+								<th class="text-left">Payee Name</th>
+								<td class="text-center"><span t-field="doc.partner_id.name"/></td>
+								<th class="text-left">Cheque Date</th>
+								<td class="text-center"><span t-field="doc.check_date"/></td>
+							</tr>
+							<tr>
+								<th class="text-left">Bank</th>
+								<td class="text-center">
+									<span t-field="doc.journal_id.bank_account_id.bank_id.name"/> - <span t-field="doc.journal_id.bank_account_id.bank_id.designation"/>
+								</td>
+								<th class="text-left">Entered Amount</th>
+								<td class="text-center"><span t-field="doc.amount"/></td>
+							</tr>
+							<tr>
+								<th class="text-left" rowspan="2">Account Number</th>
+								<td class="text-center" rowspan="2"><span t-field="doc.journal_id.bank_account_id.acc_number"/></td>
+								<th class="text-left">Amount in AED</th>
+								<td class="text-center"><span t-esc="doc.amount * (1 / doc.currency_id.rate)"/></td>
+							</tr>
+							<tr>
+								<th class="text-left">Payment Terms</th>
+								<td class="text-center">
+									<t t-if="doc.cheque_due_date">
+										<span t-esc="(doc.check_date - doc.date).days"/> Days
+									</t>
+								</td>
+							</tr>
+							<!--
+                            <tr>
+                                <td colspan="4" style="border: none!important" class="p-3">
+                                    <table class="table table-sm table-bordered">
+                                        <tr>
+                                            <th class="text-left">Document Code</th>
+                                            <th class="text-left">Particulars</th>
+                                            <th class="text-right">Amount Debit<br/> (<span t-field="doc.currency_id.name"/>)</th>
+                                            <th class="text-right">Amount Credit<br/> (<span t-field="doc.currency_id.name"/>)</th>
+                                        </tr>
+                                        <t t-foreach="doc.move_id.line_ids" t-as="line">
+                                            <tr>
+                                                <td class="text-left"><span t-field="line.account_id.code"/></td>
+                                                <td class="text-left"><span t-field="line.account_id.name"/></td>
+                                                <td class="text-right"><span t-field="line.debit"/></td>
+                                                <td class="text-right"><span t-field="line.credit"/></td>
+                                            </tr>
+                                        </t>
+                                    </table>
+                                </td>
+                            </tr>
+                            -->
+							<tr>
+								<td colspan="4" style="border: none!important" class="p-3">
+									<table class="table table-sm table-bordered">
+										<tr>
+											<td/>
+											<td class="text-right">Total (<span t-field="doc.currency_id.name"/>)</td>
+											<td class="text-right"><span t-field="doc.amount"/></td>
+											<td class="text-right"><span t-field="doc.amount"/></td>
+										</tr>
+										<tr>
+											<td class="text-left">Amount in words</td>
+											<td class="text-left" colspan="3"> : <span t-esc="doc.currency_id.amount_to_text(doc.amount)"/></td>
+										</tr>
+										<tr>
+											<td style="height: 10px"/>
+											<td style="height: 10px" colspan="3"/>
+										</tr>
+										<tr>
+											<td class="text-left">Remarks</td>
+											<td class="text-left" colspan="3"> : </td>
+										</tr>
+										<tr>
+											<td class="text-left">PR Number(s)</td>
+											<td class="text-left" colspan="3"> : </td>
+										</tr>
+										<tr>
+											<td class="text-left">Approvers</td>
+											<td class="text-left" colspan="3"> : </td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+
+						<table class="table table-sm table-bordered" style="margin-top: -16px">
+							<tr>
+								<td style="height: 50px"/>
+								<td style="height: 50px"/>
+								<td style="height: 50px" colspan="2"/>
+							</tr>
+							<tr>
+								<td class="text-center">Prepared By</td>
+								<td class="text-center">Checked  By</td>
+								<td class="text-center">Approved By</td>
+								<td class="text-center">Received By (Sig. and Date)</td>
+							</tr>
+						</table>
+
+
+
+
+					</t>
+					<t t-else="">
+						<h4 class="text-center">This Document Is Not Payable of Bank</h4>
+					</t>
+				</div>
+			</t>
+		</t>
+	</template>
+
+	<template id="report_bank_payment_voucher">
+		<t t-call="web.html_container">
+			<t t-foreach="docs" t-as="doc">
+				<t t-call="check_followup.report_bank_payment_voucher_document" t-lang="doc.partner_id.lang"/>
+			</t>
+		</t>
+	</template>
+
+</odoo>

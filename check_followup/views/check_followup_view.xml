@@ -1,0 +1,219 @@
+<odoo>
+    <data>
+
+        <record id="view_form_check_followup_in" model="ir.ui.view">
+            <field name="name">check.followup.form.in</field>
+            <field name="model">check.followup</field>
+            <field name="arch" type="xml">
+                <form delete="0">
+                    <header>
+                        <button name="change_bank" string="Deposit in Bank" type="object"
+                                states="under_collection" class="oe_highlight"/>
+
+
+                        <button name="check_reject" string="Cheque Bounced" type="object"
+                                states="under_collection" />
+
+                        <button name="invoice_arrived" string="Customer Invoice Arrived" type="object"
+                                states="in_advance" class="oe_highlight"/>
+
+
+                    </header>
+
+                    <sheet>
+
+                        <widget name="web_ribbon" title="Amount in advance AC"  bg_color="bg-danger"  attrs="{'invisible': [('state','!=','in_advance')]}"/>
+                        <widget name="web_ribbon" title="Advance Cleared from AC"  bg_color="bg-success"  attrs="{'invisible': [('state','!=','advance_cleared')]}"/>
+
+                        <widget name="web_ribbon" title="Cheque Bounced"  bg_color="bg-danger"  attrs="{'invisible': [('state','!=','reject')]}"/>
+                        <widget name="web_ribbon" title="Under Collection" bg_color="bg-info" attrs="{'invisible': [('state','!=','under_collection')]}"/>
+                        <widget name="web_ribbon" title="Cheque Deposit in Bank" bg_color="bg-success" attrs="{'invisible': [('state','!=','deposit_check')]}"/>
+                        <group col="4">
+                            <div>
+                                <h1>
+                                    <field name="name_in" string="Sequence"/>
+                                </h1>
+                            </div>
+
+                        </group>
+
+                        <group col="4" string="Details">
+                            <field name="state" widget='badge' decoration-danger="state in ('reject','in_advance')" decoration-success="state in ('under_collection','advance_cleared')" decoration-info="state == 'under_collection'"/>
+                            <field name="check_type" widget='badge' decoration-success="state == 'deposit_check'" decoration-info="state == 'under_collection'"/>
+                            <field name="check_date" attrs="{'readonly': [('state','not in',['draft'])],'invisible': [('check_type','not in',['in','out'])]}"/>
+                            <field name="cheque_number" attrs="{'readonly': [('state','not in',['draft'])],'invisible': [('check_type','not in',['in','out'])]}"/>
+                            <field name="beneficiary"/>
+                            <field name="currency_id"/>
+                            <field name="partner_id" string="Customer"/>
+                            <field name="bank_id" string="Bank" attrs="{'invisible': [('check_type','not in',['in','out'])]}"/>
+                            <field name="source_document"/>
+                            <field name="memo"/>
+                            <field name="amount"/>
+                        </group>
+
+                        <field name="log_ids" widget="one2many_list" nolabel="1">
+                            <tree  string="Cheque Log" editable="bottom">
+                                <field name="move_id"/>
+                                <field name="move_description"/>
+                                <field name="check_id" />
+                                <field name="move_date"/>
+                            </tree>
+                        </field>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record id="view_form_check_followup_out" model="ir.ui.view">
+            <field name="name">check.followup.form.out</field>
+            <field name="model">check.followup</field>
+            <field name="arch" type="xml">
+                <form delete="0">
+                    <header>
+                        <field name="state" invisible="1"/>
+                        <button name="change_date" string="Withdraw Check" type="object" attrs="{'invisible': [('state','!=','out_standing')]}" class="oe_highlight"/>
+
+                        <button name="check_reject" string="Cheque Bounced" type="object" attrs="{'invisible': [('state','!=','out_standing')]}" />
+
+                        <button name="bill_arrived" string="Vendor Bill Arrived" type="object"
+                                states="out_advance" class="oe_highlight"/>
+
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Advance Out from AC"  bg_color="bg-danger"  attrs="{'invisible': [('state','!=','out_advance')]}"/>
+                        <widget name="web_ribbon" title="Advance Cleared from AC"  bg_color="bg-success"  attrs="{'invisible': [('state','!=','advance_cleared')]}"/>
+
+                        <widget name="web_ribbon" title="Cheque Bounced"  bg_color="bg-danger"  attrs="{'invisible': [('state','!=','reject')]}"/>
+                        <widget name="web_ribbon" title="Out Standing" bg_color="bg-info" attrs="{'invisible': [('state','!=','out_standing')]}"/>
+                        <widget name="web_ribbon" title="Cheque withdrawal" bg_color="bg-success" attrs="{'invisible': [('state','!=','withdraw_check')]}"/>
+
+                        <group col="4" string="Cheque Details">
+                            <field name="state" widget='badge' decoration-danger="state in ('reject','out_advance')" decoration-success="state in ('withdraw_check','advance_cleared')" decoration-info="state == 'out_standing'"/>
+                            <field name="check_date" attrs="{'readonly': [('state','not in',['draft'])],'invisible': [('check_type','not in',['in','out'])]}"/>
+                            <field name="cheque_number" attrs="{'readonly': [('state','not in',['draft'])],'invisible': [('check_type','not in',['in','out'])]}"/>
+                            <field name="beneficiary" />
+                            <field name="currency_id"/>
+                            <field name="bank_id" string="Bank"/>
+                            <field name="source_document"/>
+                            <field name="memo"/>
+                            <field name="check_type" widget='badge' decoration-danger="state == 'reject'" decoration-success="state == 'withdraw_check'" decoration-info="state == 'out_standing'"/>
+                            <field name="amount"/>
+
+                        </group>
+
+                        <field name="log_ids" widget="one2many_list" nolabel="1">
+                            <tree  string="Cheque Log" editable="bottom">
+                                <field name="move_id"/>
+                                <field name="move_description"/>
+                                <field name="check_id"/>
+                                <field name="move_date"/>
+                            </tree>
+                        </field>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="sequence_check_followup_in" model="ir.sequence">
+            <field name="name">Cheque In sequence</field>
+            <field name="code">check.followup.in.code</field>
+            <field name="prefix">/%(range_year)s/</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="True" name="use_date_range"/>
+            <field eval="False" name="company_id"/>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="sequence_check_followup_out" model="ir.sequence">
+            <field name="name">Cheque out sequence</field>
+            <field name="code">check.followup.out.code</field>
+            <field name="prefix">/%(range_year)s/</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="True" name="use_date_range"/>
+            <field eval="False" name="company_id"/>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="view_tree_check_followup_in" model="ir.ui.view">
+            <field name="name">check.in.tree</field>
+            <field name="model">check.followup</field>
+            <field name="arch" type="xml">
+                <tree string="Cheque In" delete="0">
+                    <!--                    <field name="name_in"/>-->
+                    <field name="check_type"/>
+                    <field name="partner_id"/>
+                    <field name="check_date" attrs="{'invisible': [('check_type','not in',['in','out'])]}"/>
+                    <field name="cheque_number" attrs="{'invisible': [('check_type','not in',['in','out'])]}"/>
+                    <field name="beneficiary"/>
+                    <field name="currency_id"/>
+                    <field name="state" widget='badge' decoration-danger="state == 'reject'" decoration-success="state == 'deposit_check'" decoration-info="state == 'under_collection'"/>
+                    <field name="amount"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_tree_check_followup_out" model="ir.ui.view">
+            <field name="name">check.out.tree</field>
+            <field name="model">check.followup</field>
+            <field name="arch" type="xml">
+                <tree string="Cheque Out" delete="0">
+                    <!--                    <field name="name_out"/>-->
+                    <field name="check_type"/>
+
+                    <field name="partner_id"/>
+                    <field name="check_date" attrs="{'invisible': [('check_type','not in',['in','out'])]}"/>
+                    <field name="cheque_number" attrs="{'invisible': [('check_type','not in',['in','out'])]}"/>
+                    <field name="beneficiary"/>
+                    <field name="currency_id"/>
+                    <field name="state" widget='badge' decoration-danger="state == 'reject'" decoration-success="state == 'withdraw_check'" decoration-info="state == 'out_standing'"/>
+                    <field name="amount"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="check_in_ac" model="ir.actions.act_window">
+            <field name="name">Cheque Followup</field>
+            <field name="res_model">check.followup</field>
+            <!--<field name="view_id" ref="view_form_check_followup_in"/>-->
+            <!--<field name="view_id" ref="view_tree_check_followup_in"/>-->
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_tree_check_followup_in')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_form_check_followup_in')})]"/>
+            <field name="view_mode">form</field>
+            <field name="domain">[('check_type','in',['in'])]</field>
+        </record>
+
+        <record id="check_out_ac" model="ir.actions.act_window">
+            <field name="name">Cheque Followup</field>
+            <field name="res_model">check.followup</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_tree_check_followup_out')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_form_check_followup_out')})]"/>
+            <field name="view_mode">form</field>
+            <field name="domain">[('check_type','in',['out'])]</field>
+        </record>
+        <menuitem id="check_followup_root_ch1_ch1" name="PDC/CDC Receipt" parent="account.menu_finance_receivables" action="check_in_ac"/>
+
+        <menuitem id="check_followup_root_ch2_ch2" name="PDC/CDC Paid" parent="account.menu_finance_payables" action="check_out_ac"/>
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+
+        <record id="view_form_account_inherit" model="ir.ui.view">
+            <field name="name">view.form.account.inherit</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='deprecated']" position="after">
+                    <field name="active"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

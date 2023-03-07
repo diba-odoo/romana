@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record id="report_telegraphic_transfer_payment_print" model="ir.actions.report">
+		<field name="name">Telegraphic Transfer</field>
+		<field name="model">account.payment</field>
+		<field name="report_type">qweb-pdf</field>
+		<field name="report_name">check_followup.report_telegraphic_transfer_payment</field>
+		<field name="report_file">check_followup.report_telegraphic_transfer_payment</field>
+		<field name="binding_model_id" eval="False"/>
+		<field name="binding_type">report</field>
+	</record>
+
+	<record id="report_bank_payment_voucher_print" model="ir.actions.report">
+		<field name="name">Bank Payment Voucher</field>
+		<field name="model">account.payment</field>
+		<field name="report_type">qweb-pdf</field>
+		<field name="report_name">check_followup.report_bank_payment_voucher</field>
+		<field name="report_file">check_followup.report_bank_payment_voucher</field>
+		<field name="binding_model_id" eval="False"/>
+		<field name="binding_type">report</field>
+	</record>	
+	
+</odoo>
+

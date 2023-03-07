@@ -1,0 +1,25 @@
+<odoo>
+    <data>
+         <record id="view_wizard_change_bank" model="ir.ui.view">
+            <field name="name">Wizard Change Bank Form</field>
+            <field name="model">change.bank</field>
+            <field name="arch" type="xml">
+                <form string="Change Bank">
+                    <group string="Cheque Details">
+                        <field name="journal_id" attrs="{'invisible': [('check_type','=','out')]}"/>
+                        <field name="deposit_date"  attrs="{'invisible': [('check_type','=','out')]}"/>
+                        <field name="withdraw_date"  attrs="{'invisible': [('check_type','=','in')]}"/>
+                        <field name="check_type" invisible="1" />
+                    </group>
+                    <footer>
+                        <button string="Deposit In Bank" name="wizard_submit" class="hightlight" type="object"
+                        attrs="{'invisible': [('check_type','=','out')]}"/>
+                        <button string="Withdraw Check" name="wizard_submit" class="hightlight" type="object"
+                        attrs="{'invisible': [('check_type','=','in')]}"/> or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

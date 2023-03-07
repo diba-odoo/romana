@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_intercompany,intercompany.intercompany,model_inter_company,,1,1,1,0
+access_intercompany_from_line,intercompany.intercompany,model_inter_company_from_line,,1,1,1,1
+access_intercompany_to_line,intercompany.intercompany,model_inter_company_to_line,,1,1,1,1

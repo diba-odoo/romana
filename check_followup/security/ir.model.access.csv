@@ -1,0 +1,4 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_check_followup,check_followup,check_followup.model_check_followup,,1,1,0,0
+access_check_log,check_log,check_followup.model_check_log,,1,1,0,0
+access_change_bank,change_bank,check_followup.model_change_bank,,1,1,0,0
