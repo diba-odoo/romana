@@ -55,7 +55,7 @@
 <!--                    <attribute name="invisible">1</attribute>-->
 <!--                </xpath>-->
                 <xpath expr="//button[@name='action_draft']" position="after">
-					<button name="print_telegraphic_transfer" string="Print TT" type="object" class="oe_highlight" attrs="{'invisible': ['|', '|', '|', ('journal_type', '!=', 'bank'), ('payment_method_code', 'not in', ['manual', 'tt']), ('payment_type', '!=', 'outbound'), ('state', '=', 'draft')]}"/>
+<!--					<button name="print_telegraphic_transfer" string="Print TT" type="object" class="oe_highlight" attrs="{'invisible': ['|', '|', '|', ('journal_type', '!=', 'bank'), ('payment_method_code', 'not in', ['manual', 'tt']), ('payment_type', '!=', 'outbound'), ('state', '=', 'draft')]}"/>-->
 <!--					<button name="print_bank_payment_voucher" string="Print Bank Voucher" type="object" class="oe_highlight" attrs="{'invisible': ['|', '|', '|', ('journal_type', '!=', 'bank'), ('payment_method_code', 'not in', ['manual', 'pdc']), ('payment_type', '!=', 'outbound'), ('state', '=', 'draft')]}"/>-->
 				</xpath>
 
