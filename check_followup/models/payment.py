@@ -4,14 +4,16 @@ from odoo.exceptions import ValidationError,UserError
 # from odoo import amount_to_text
 
 
+class AccountPaymentMethod(models.Model):
+    _inherit = 'account.payment.method'
+
+    check_type = fields.Selection(selection=[('direct', 'Direct'), ('PDC', 'PDC')])
+
 class AccountPaymentInherit(models.Model):
     _inherit = 'account.payment'
 
     check_followup = fields.Selection([('pdc','PDC'),
-                                       ('cdc','CDC'),
-                                       ('advance','Advance Payment'),
-                                       ('direct','Direct'),
-                                       ('credit_card','Credit Card')],required=True,string='Payment Type')
+                                       ('direct','Direct')],string='Payment Type',compute='_get_check_type',readonly=True)
     journal_type = fields.Selection(related='journal_id.type')
     check_date = fields.Date(string='Cheque Date',copy=False)
     check_number = fields.Char(string='Cheque Number',copy=False)
@@ -21,6 +23,26 @@ class AccountPaymentInherit(models.Model):
     # check_id = fields.Many2one('check.followup',string='Check Ref')
     debit_line_id = fields.Many2one('account.move.line')
     credit_line_id = fields.Many2one('account.move.line')
+
+
+    @api.depends('payment_method_id')
+    def _get_check_type(self):
+        for r in self:
+            if r.payment_method_id:
+                if r.payment_method_id.check_type == 'PDC':
+                    r.check_followup = 'pdc'
+                else:
+                    r.check_followup = 'direct'
+
+
+    def action_draft2(self):
+        check_search = self.env['check.followup'].search([('payment_id.id', '=', self.id)])
+        if check_search:
+            for x in check_search:
+                if x.state !='reject':
+                    raise ValidationError('You can not change state for this Payment because it is There are pay-related checks !!')
+        else:
+            self.move_id.button_draft()
 
     def _compute_check(self):
         payment_count = self.env['check.followup'].sudo().search_count([('payment_id','=',self.id)])

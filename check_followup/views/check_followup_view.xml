@@ -155,7 +155,7 @@
             <field name="name">check.in.tree</field>
             <field name="model">check.followup</field>
             <field name="arch" type="xml">
-                <tree string="Cheque In" delete="0">
+                <tree string="Cheque In" delete="0" create="0">
                     <!--                    <field name="name_in"/>-->
                     <field name="check_type"/>
                     <field name="partner_id"/>
@@ -174,7 +174,7 @@
             <field name="name">check.out.tree</field>
             <field name="model">check.followup</field>
             <field name="arch" type="xml">
-                <tree string="Cheque Out" delete="0">
+                <tree string="Cheque Out" delete="0" create="0">
                     <!--                    <field name="name_out"/>-->
                     <field name="check_type"/>
 
@@ -212,8 +212,8 @@
             <field name="view_mode">form</field>
             <field name="domain">[('check_type','in',['out'])]</field>
         </record>
-        <menuitem id="check_followup_root_ch1_ch1" name="PDC/CDC Receipt" parent="account.menu_finance_receivables" action="check_in_ac"/>
+        <menuitem id="check_followup_root_ch1_ch1" name="Checks Under Collection" parent="account.menu_finance_receivables" action="check_in_ac"/>
 
-        <menuitem id="check_followup_root_ch2_ch2" name="PDC/CDC Paid" parent="account.menu_finance_payables" action="check_out_ac"/>
+        <menuitem id="check_followup_root_ch2_ch2" name="Outstanding Checks" parent="account.menu_finance_payables" action="check_out_ac"/>
     </data>
 </odoo>

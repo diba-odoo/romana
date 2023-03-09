@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<odoo>
+<record id="account_payment_method_tree_view" model="ir.ui.view">
+         <field name="name">account.payment.method.tree</field>
+         <field name="model">account.payment.method</field>
+         <field name="arch" type="xml">
+             <tree string="Check Follow Up">
+                 <field name="name"/>
+                 <field name="code"/>
+                 <field name="payment_type"/>
+                 <field name="check_type"/>
+             </tree>
+         </field>
+     </record>
+
+    <record id="account_payment_method_view_form" model="ir.ui.view">
+            <field name="name">account.payment.method form</field>
+            <field name="model">account.payment.method</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group col="4" colspan="4" >
+                            <field name="name"/>
+                 <field name="code"/>
+                 <field name="payment_type"/>
+                 <field name="check_type"/>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+     <record id="action_account_payment_method" model="ir.actions.act_window">
+        <field name="type">ir.actions.act_window</field>
+        <field name="name">Payment Method</field>
+        <field name="res_model">account.payment.method</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name=" Payment Method " id="check_followups_customer_action" action="action_account_payment_method" parent="account.root_payment_menu"/>
+
+
+
+</odoo>

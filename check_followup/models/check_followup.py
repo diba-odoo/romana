@@ -287,7 +287,7 @@ class CheckFollowup(models.Model):
 
     def withdraw_check(self,date):
         payment_search = self.env['account.payment'].search([('id','=', self.payment_id.id)])
-        pettycash_search = self.env['custody.request'].search([('id','=',self.petty_cash_id.id)])
+        # pettycash_search = self.env['custody.request'].search([('id','=',self.petty_cash_id.id)])
         if payment_search:
             create_move = self.create_move(payment_search,date)
             log_obj = self.env['check.log']
@@ -308,16 +308,16 @@ class CheckFollowup(models.Model):
                 # 'channel_ids': [(4, self.env.ref('mail.channel_all_employees').id)],
             }
             channel_group_obj.create(dic)
-        if pettycash_search:
-
-            create_move = self.create_move(pettycash_search, date)
-            log_obj = self.env['check.log']
-            log_obj.create({'move_description': 'Withdraw Cheque From ' + str(pettycash_search.journal_id.name),
-                            'move_id': create_move.id,
-                            'move_date': datetime.today(),
-                            'check_id': self.id,
-                            })
-            self.state = 'withdraw_check'
+        # if pettycash_search:
+        #
+        #     create_move = self.create_move(pettycash_search, date)
+        #     log_obj = self.env['check.log']
+        #     log_obj.create({'move_description': 'Withdraw Cheque From ' + str(pettycash_search.journal_id.name),
+        #                     'move_id': create_move.id,
+        #                     'move_date': datetime.today(),
+        #                     'check_id': self.id,
+        #                     })
+        #     self.state = 'withdraw_check'
 
             channel_group_obj = self.env['mail.message']
             dic = {

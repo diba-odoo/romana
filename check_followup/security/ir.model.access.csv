@@ -1,4 +1,12 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-access_check_followup,check_followup,check_followup.model_check_followup,,1,1,0,0
-access_check_log,check_log,check_followup.model_check_log,,1,1,0,0
-access_change_bank,change_bank,check_followup.model_change_bank,,1,1,0,0
+access_check_followup_billing,check_followup,check_followup.model_check_followup,account.group_account_invoice,1,1,1,1
+access_check_log_billing,check_log,check_followup.model_check_log,account.group_account_invoice,1,1,1,1
+access_change_bank_billing,change_bank,check_followup.model_change_bank,account.group_account_invoice,1,1,1,1
+access_change_bank_manager,check_followup,check_followup.model_check_followup,account.group_account_manager,1,1,1,1
+access_change_bank_manager,check_log,check_followup.model_check_log,account.group_account_manager,1,1,1,1
+access_check_log_billing,check_log,check_followup.model_check_log,account.group_account_manager,1,1,1,1
+access_check_followup_user,check_followup,check_followup.model_check_followup,account.group_account_user,1,1,1,1
+access_check_followup_user,check_log,check_followup.model_check_log,account.group_account_user,1,1,1,1
+access_check_followup_user,check_log,check_followup.model_check_log,account.group_account_user,1,1,1,1
+access_change_bank_manager,change_bank,check_followup.model_change_bank,account.group_account_manager,1,1,1,1
+

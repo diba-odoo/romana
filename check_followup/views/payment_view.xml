@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='payment_method_line_id']" position="after">
                     <field name="journal_type" invisible="1"/>
-                    <field name="check_followup" attrs="{'readonly': [('state','!=','draft')]}"/>
+                    <field name="check_followup"/>
                     <field name="check_date" attrs="{'invisible': [('check_followup','not in',['pdc','cdc'])],'required': [('check_followup','in',['pdc','cdc'])],'readonly': [('state','!=','draft')]}"/>
                     <field name="cheque_number" attrs="{'invisible': [('check_followup','not in',['pdc','cdc'])],'required': [('check_followup','in',['cdc','pdc'])],'readonly': [('state','!=','draft')]}"/>
                 </xpath>
@@ -39,12 +39,21 @@
                     <attribute name="string">Receipt Number</attribute>
 
                 </xpath>
+
                 <xpath expr="//button[@name='action_draft']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-                <xpath expr="//field[@name='payment_method_line_id']" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                <xpath expr="//button[@name='action_draft']" position="after">
+
+                <button name="action_draft2" string="Reset To Draft" type="object" class="btn btn-secondary"
+                                attrs="{'invisible': [('state', 'not in', ('posted', 'cancel'))]}"
+                                groups="account.group_account_invoice" data-hotkey="w"/>
                 </xpath>
+
+
+<!--                <xpath expr="//field[@name='payment_method_line_id']" position="attributes">-->
+<!--                    <attribute name="invisible">1</attribute>-->
+<!--                </xpath>-->
                 <xpath expr="//button[@name='action_draft']" position="after">
 					<button name="print_telegraphic_transfer" string="Print TT" type="object" class="oe_highlight" attrs="{'invisible': ['|', '|', '|', ('journal_type', '!=', 'bank'), ('payment_method_code', 'not in', ['manual', 'tt']), ('payment_type', '!=', 'outbound'), ('state', '=', 'draft')]}"/>
 <!--					<button name="print_bank_payment_voucher" string="Print Bank Voucher" type="object" class="oe_highlight" attrs="{'invisible': ['|', '|', '|', ('journal_type', '!=', 'bank'), ('payment_method_code', 'not in', ['manual', 'pdc']), ('payment_type', '!=', 'outbound'), ('state', '=', 'draft')]}"/>-->

@@ -8,6 +8,7 @@
         # 'views/account_view.xml',
         'views/check_followup_view.xml',
         'views/payment_view.xml',
+        'views/account_payment_method.xml',
         'views/journal_view.xml',
         'wizard/change_bank_view.xml',
         'report/report.xml',
