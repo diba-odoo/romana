@@ -38,9 +38,14 @@ class AccountPaymentInherit(models.Model):
     def action_draft2(self):
         check_search = self.env['check.followup'].search([('payment_id.id', '=', self.id)])
         if check_search:
-            for x in check_search:
-                if x.state !='reject':
-                    raise ValidationError('You can not change state for this Payment because it is There are pay-related checks !!')
+            if self.state == 'cancel':
+              raise ValidationError('You cannot change the status of this batch. Try creating another one ')
+            else:
+                for x in check_search:
+                    if x.state !='reject':
+                        raise ValidationError('You can not change state for this Payment because it is There are pay-related checks !!')
+                    else:
+                        self.move_id.button_draft()
         else:
             self.move_id.button_draft()
 
@@ -318,11 +323,11 @@ class AccountPaymentInherit(models.Model):
             self.move_intercompany_id.button_cancel()
         super(AccountPaymentInherit,self).action_cancel()
 
-    def action_draft(self):
-        if self.state == 'cancel':
-            raise ValidationError('You can not change state for this Payment because it is on canceled state !!')
-        else:
-            super(AccountPaymentInherit, self).action_draft()
+    # def action_draft(self):
+    #     if self.state == 'cancel':
+    #         raise ValidationError('You can not not able to cancel the payment because some checks are pending !!')
+    #     else:
+    #         super(AccountPaymentInherit, self).action_draft()
 
     def move_direct_in(self):
         move_obj = self.env['account.move']

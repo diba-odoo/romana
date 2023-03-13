@@ -11,7 +11,7 @@ class AccountMove(models.Model):
 
     def button_draft(self):
 
-        if self.state == 'cancel':
-            raise ValidationError('You can not change state for this entry because it is on canceled state !!')
-        else:
-            super(AccountMove,self).button_draft()
+        # if self.state == 'cancel':
+        #     raise ValidationError('You can not change state for this entry because it is on canceled state !!')
+        # else:
+        super(AccountMove,self).button_draft()
